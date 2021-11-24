@@ -141,7 +141,7 @@ public final class SwiftPackageManagerInteractor: SwiftPackageManagerInteracting
         }
 
         // create `Package.swift`
-        let packageManifestPath = pathsProvider.temporaryPackageSwiftPath
+        let packageManifestPath = pathsProvider.destinationPackageSwiftPath
         try fileHandler.createFolder(packageManifestPath.removingLastComponent())
         try fileHandler.write(dependencies.manifestValue(), path: packageManifestPath, atomically: true)
 
@@ -161,18 +161,11 @@ public final class SwiftPackageManagerInteractor: SwiftPackageManagerInteracting
         guard !hasRemoteDependencies || fileHandler.exists(pathsProvider.temporaryPackageResolvedPath) else {
             throw SwiftPackageManagerInteractorError.packageResolvedNotFound
         }
-        guard fileHandler.exists(pathsProvider.temporaryPackageSwiftPath) else {
+        guard fileHandler.exists(pathsProvider.destinationPackageSwiftPath) else {
             throw SwiftPackageManagerInteractorError.packageSwiftNotFound
         }
         guard fileHandler.exists(pathsProvider.destinationBuildDirectory) else {
             throw SwiftPackageManagerInteractorError.buildDirectoryNotFound
-        }
-
-        if fileHandler.exists(pathsProvider.temporaryPackageSwiftPath) {
-            try copy(
-                from: pathsProvider.temporaryPackageSwiftPath,
-                to: pathsProvider.destinationPackageSwiftPath
-            )
         }
 
         if fileHandler.exists(pathsProvider.temporaryPackageResolvedPath) {
@@ -183,7 +176,6 @@ public final class SwiftPackageManagerInteractor: SwiftPackageManagerInteracting
         }
 
         // remove temporary files
-        try? FileHandler.shared.delete(pathsProvider.temporaryPackageSwiftPath)
         try? FileHandler.shared.delete(pathsProvider.temporaryPackageResolvedPath)
     }
 
@@ -208,7 +200,6 @@ private struct SwiftPackageManagerPathsProvider {
     let destinationBuildDirectory: AbsolutePath
 
     let temporaryPackageResolvedPath: AbsolutePath
-    let temporaryPackageSwiftPath: AbsolutePath
 
     init(dependenciesDirectory: AbsolutePath) {
         destinationPackageSwiftPath = dependenciesDirectory
@@ -223,7 +214,5 @@ private struct SwiftPackageManagerPathsProvider {
 
         temporaryPackageResolvedPath = destinationSwiftPackageManagerDirectory
             .appending(component: Constants.DependenciesDirectory.packageResolvedName)
-        temporaryPackageSwiftPath = destinationSwiftPackageManagerDirectory
-            .appending(component: Constants.DependenciesDirectory.packageSwiftName)
     }
 }
