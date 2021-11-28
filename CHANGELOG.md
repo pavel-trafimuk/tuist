@@ -6,7 +6,7 @@ Please, check out guidelines: https://keepachangelog.com/en/1.0.0/
 
 ### Fixed
 
-- Crash when running `tuist build` with `TUIST_CONFIG_VERBOSE=1` [#3752](https://github.com/tuist/tuist/pull/3752) by [@fortmarek](https://github.com/fortmarek)
+- Fix crash when running `tuist build` with `TUIST_CONFIG_VERBOSE=1` [#3752](https://github.com/tuist/tuist/pull/3752) by [@fortmarek](https://github.com/fortmarek)
 - Improve error message in case `ModuleMapMapper` fails to retrieve a dependency [#3733](https://github.com/tuist/tuist/pull/3733) by [@danyf90](https://github.com/danyf90)
 - Fix resolution of external dependencies with products including binary targets [#3737](https://github.com/tuist/tuist/pull/3737) by [@danyf90](https://github.com/danyf90)
 
